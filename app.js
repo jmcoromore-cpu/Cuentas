@@ -180,7 +180,8 @@ function vInicio() {
   const { y, m } = ui.mes;
   const movs = movsDe(y, m).slice().sort((a, b) => (b.fecha.localeCompare(a.fecha)) || (b.creado || 0) - (a.creado || 0));
   const t = totales(movs);
-  const s = saldos();
+  const bal = x => x.ing - x.gas;
+  const clase = v => (v < -0.004 ? 'c-peach' : 'c-mint');
 
   let lista = '';
   let dia = null;
@@ -199,12 +200,12 @@ function vInicio() {
 
   <section class="card-dark">
     <div class="stack-4">
-      <div class="lbl">Saldo disponible</div>
-      <div class="big">${eur(s.cuenta + s.efectivo)}</div>
+      <div class="lbl">${bal(t.total) < -0.004 ? 'Pérdida' : 'Ahorro'} del mes</div>
+      <div class="big ${clase(bal(t.total))}">${eurSigno(bal(t.total))}</div>
     </div>
     <div class="grid2">
-      <div class="tile"><div class="lbl" style="display:flex;gap:6px;align-items:center">${ICON.cuenta}Cuenta</div><div class="v">${eur(s.cuenta)}</div></div>
-      <div class="tile"><div class="lbl" style="display:flex;gap:6px;align-items:center">${ICON.efectivo}Efectivo</div><div class="v">${eur(s.efectivo)}</div></div>
+      <div class="tile"><div class="lbl" style="display:flex;gap:6px;align-items:center">${ICON.cuenta}Cuenta</div><div class="v ${clase(bal(t.cuenta))}">${eurSigno(bal(t.cuenta))}</div></div>
+      <div class="tile"><div class="lbl" style="display:flex;gap:6px;align-items:center">${ICON.efectivo}Efectivo</div><div class="v ${clase(bal(t.efectivo))}">${eurSigno(bal(t.efectivo))}</div></div>
     </div>
   </section>
 
@@ -390,16 +391,6 @@ function vAjustes() {
   <h1 class="page-title">Ajustes</h1>
   <div class="settings">
     <section class="card" style="margin-top:0">
-      <h3>Saldo inicial</h3>
-      <div class="note">Lo que tenías antes de empezar a usar la app. Sirve para que el saldo disponible sea real.</div>
-      <div class="grid2">
-        <div class="field"><label for="ini-cuenta">Cuenta (€)</label><input class="input" id="ini-cuenta" inputmode="decimal" value="${db.inicial.cuenta ? String(db.inicial.cuenta).replace('.', ',') : ''}" placeholder="0,00"></div>
-        <div class="field"><label for="ini-efectivo">Efectivo (€)</label><input class="input" id="ini-efectivo" inputmode="decimal" value="${db.inicial.efectivo ? String(db.inicial.efectivo).replace('.', ',') : ''}" placeholder="0,00"></div>
-      </div>
-      <button class="primary" data-a="guardar-inicial">Guardar saldo inicial</button>
-    </section>
-
-    <section class="card">
       <h3>Copia de seguridad</h3>
       <div class="note">Tus datos solo están guardados en este móvil y este navegador. Haz una copia de vez en cuando y guárdala en la nube.</div>
       <button class="secondary" data-a="exportar">Descargar copia (.json)</button>

@@ -1,6 +1,6 @@
 // Service worker de Cuentas: permite abrir la app sin conexión.
 // Si cambias algún archivo, sube el número de versión para que los móviles cojan la nueva.
-const CACHE = 'cuentas-v1';
+const CACHE = 'cuentas-v2';
 const ARCHIVOS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', e => {
